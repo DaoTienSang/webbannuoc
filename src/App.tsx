@@ -2,7 +2,7 @@ import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
 import { SignOutButton } from "./SignOutButton";
 import { BeverageStore } from "./components/BeverageStore";
 import { Toaster } from "sonner";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { toast } from "sonner";
 import { AdminDashboard } from "./components/AdminDashboard";
@@ -15,6 +15,38 @@ function UserSignInForm() {
   const [submitting, setSubmitting] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      // Chỉ sử dụng anonymous auth
+      await signIn("anonymous");
+      toast.success("Đã đăng nhập với tư cách khách!");
+    } catch (error: any) {
+      console.error("Authentication error:", error);
+      toast.error("Đăng nhập thất bại. Vui lòng thử lại sau.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      // Chỉ sử dụng anonymous auth
+      await signIn("anonymous");
+      toast.success("Đã đăng nhập với tư cách khách!");
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      toast.error("Đăng ký thất bại. Vui lòng thử lại sau.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleAnonymousSignIn = async () => {
     setSubmitting(true);
     try {
@@ -29,20 +61,83 @@ function UserSignInForm() {
     }
   };
 
+  const toggleForm = (showRegister: boolean) => {
+    if (containerRef.current) {
+      if (showRegister) {
+        containerRef.current.classList.add('active');
+      } else {
+        containerRef.current.classList.remove('active');
+      }
+    }
+  };
+
   return (
     <div className="auth-container" ref={containerRef}>
       <div className="form-box login">
-        <div className="p-8 text-center">
-          <h1 className="text-2xl font-bold mb-6">Chào mừng đến với Nước Việt Nam!</h1>
-          <p className="mb-6">Hiện tại, hệ thống chỉ hỗ trợ đăng nhập dưới dạng khách. Nhấn nút dưới đây để tiếp tục.</p>
+        <form onSubmit={handleSignIn}>
+          <h1>Đăng Nhập</h1>
+          <div className="input-box">
+            <input type="email" name="email" placeholder="Email" />
+            <i className='bx bxs-envelope'></i>
+          </div>
+          <div className="input-box">
+            <input type="password" name="password" placeholder="Mật khẩu" />
+            <i className='bx bxs-lock-alt'></i>
+          </div>
+          <div className="forgot-link">
+            <a href="#">Quên mật khẩu?</a>
+          </div>
+          <button type="submit" className="btn" disabled={submitting}>
+            {submitting ? "Đang xử lý..." : "Đăng Nhập"}
+          </button>
+          <p>hoặc</p>
           <button 
             type="button" 
-            className="btn anonymous-btn w-full"
+            className="btn anonymous-btn"
             onClick={handleAnonymousSignIn}
             disabled={submitting}
           >
-            {submitting ? "Đang xử lý..." : "Tiếp tục với tư cách khách"}
+            Tiếp tục không cần đăng nhập
           </button>
+        </form>
+      </div>
+
+      <div className="form-box register">
+        <form onSubmit={handleSignUp}>
+          <h1>Đăng Ký</h1>
+          <div className="input-box">
+            <input type="email" name="email" placeholder="Email" />
+            <i className='bx bxs-envelope'></i>
+          </div>
+          <div className="input-box">
+            <input type="password" name="password" placeholder="Mật khẩu" />
+            <i className='bx bxs-lock-alt'></i>
+          </div>
+          <button type="submit" className="btn" disabled={submitting}>
+            {submitting ? "Đang xử lý..." : "Đăng Ký"}
+          </button>
+          <p>hoặc</p>
+          <button 
+            type="button" 
+            className="btn anonymous-btn"
+            onClick={handleAnonymousSignIn}
+            disabled={submitting}
+          >
+            Tiếp tục không cần đăng nhập
+          </button>
+        </form>
+      </div>
+
+      <div className="toggle-box">
+        <div className="toggle-panel toggle-left">
+          <h1>Chào mừng bạn!</h1>
+          <p>Chưa có tài khoản?</p>
+          <button className="btn register-btn" onClick={() => toggleForm(true)}>Đăng ký</button>
+        </div>
+        <div className="toggle-panel toggle-right">
+          <h1>Chào mừng trở lại!</h1>
+          <p>Đã có tài khoản?</p>
+          <button className="btn login-btn" onClick={() => toggleForm(false)}>Đăng nhập</button>
         </div>
       </div>
     </div>
