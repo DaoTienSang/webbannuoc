@@ -9,6 +9,14 @@ export default {
       domain: "http://localhost:3000",
       applicationID: "convex",
     },
+    {
+      domain: "http://localhost:5173",
+      applicationID: "convex",
+    },
+    {
+      domain: "https://posh-anaconda-144.convex.site",
+      applicationID: "convex",
+    },
     // Thêm domain của Vercel preview nếu có
     {
       domain: "https://*.vercel.app",
