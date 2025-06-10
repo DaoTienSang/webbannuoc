@@ -314,9 +314,7 @@ export const updateUserStatus = mutation({
     // Thay vào đó, chúng ta có thể xử lý theo dạng "active" hoặc "inactive" với isAnonymous
     const user = await ctx.db.get(args.userId);
     if (user) {
-      await ctx.db.patch(args.userId, { 
-        isAnonymous: args.status === "inactive" // Đặt isAnonymous = true nếu status là inactive
-      });
+      await ctx.db.patch(args.userId, { active: args.status !== "inactive" });
     }
     return { success: true };
   },
@@ -330,9 +328,7 @@ export const toggleUserStatus = mutation({
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
     // Khi isActive = false, chúng ta đặt isAnonymous = true để khóa tài khoản
-    await ctx.db.patch(args.userId, { 
-      isAnonymous: !args.isActive
-    });
+    await ctx.db.patch(args.userId, { active: false });
     return { success: true };
   },
 });
@@ -353,7 +349,7 @@ export const deleteUser = mutation({
     
     if (userOrders) {
       // Nếu người dùng có đơn hàng, không xóa tài khoản mà chỉ đặt trạng thái là vô hiệu
-      await ctx.db.patch(args.userId, { isAnonymous: true });
+      await ctx.db.patch(args.userId, { active: false });
       return { success: true, message: "Người dùng đã bị vô hiệu hóa vì có đơn hàng liên quan" };
     }
     

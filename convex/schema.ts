@@ -1,8 +1,16 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { authTables } from "@convex-dev/auth/server";
 
 const applicationTables = {
+  // Bảng người dùng tự định nghĩa
+  users: defineTable({
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    createdAt: v.optional(v.number()),
+    active: v.optional(v.boolean()),
+    isAnonymous: v.optional(v.boolean()),
+  }),
+
   // Bảng cài đặt hệ thống
   settings: defineTable({
     id: v.string(),
@@ -162,6 +170,5 @@ const applicationTables = {
 };
 
 export default defineSchema({
-  ...authTables,
   ...applicationTables,
 });

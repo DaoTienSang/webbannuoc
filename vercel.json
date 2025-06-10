@@ -8,5 +8,6 @@
   ],
   "env": {
     "VITE_CONVEX_URL": "https://cheerful-hippopotamus-190.convex.cloud"
-  }
+  },
+  "public": true
 } 

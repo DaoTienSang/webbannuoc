@@ -1,22 +1,33 @@
-import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
-import { Anonymous } from "@convex-dev/auth/providers/Anonymous";
-import { query } from "./_generated/server";
+import { v } from "convex/values";
+import { defineTable } from "convex/server";
+import { query, mutation } from "./_generated/server";
 
-// Đơn giản hóa: chỉ sử dụng Anonymous auth
-export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Anonymous],
+// Bỏ qua authentication để giải quyết vấn đề đăng nhập
+// Tạo bảng users độc lập
+export const usersTable = defineTable({
+  name: v.string(),
+  email: v.optional(v.string()),
+  createdAt: v.number(),
 });
 
-export const loggedInUser = query({
+// Đơn giản hóa: tạo một người dùng anonymous khi đăng nhập
+export const signInAnonymously = mutation({
+  args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      return null;
-    }
-    const user = await ctx.db.get(userId);
-    if (!user) {
-      return null;
-    }
-    return user;
+    const userId = await ctx.db.insert("users", {
+      name: "Khách hàng",
+      createdAt: Date.now()
+    });
+    
+    return { userId };
+  },
+});
+
+// Kiểm tra người dùng đăng nhập
+export const getUser = query({
+  args: { userId: v.optional(v.id("users")) },
+  handler: async (ctx, args) => {
+    if (!args.userId) return null;
+    return await ctx.db.get(args.userId);
   },
 });
