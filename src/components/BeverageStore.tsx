@@ -144,15 +144,6 @@ export function BeverageStore() {
                 <div className="mb-4 max-w-md">
                   <SearchBar onProductClick={handleProductClick} />
                 </div>
-                
-                <div>
-                  <button
-                    onClick={handleSeedData}
-                    className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 shadow-lg animate-bounce-in"
-                  >
-                    ✨ Thêm dữ liệu mẫu
-                  </button>
-                </div>
               </div>
               
               {/* Floating elements */}
