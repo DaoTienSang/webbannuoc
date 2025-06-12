@@ -56,7 +56,6 @@ export function SignInForm() {
       
       <div className="text-center mt-4 text-sm text-gray-500">
         <p>Chỉ dành cho quản trị viên</p>
-        <p className="mt-2">Mật khẩu: admin123</p>
       </div>
     </div>
   );
