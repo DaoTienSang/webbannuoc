@@ -25,7 +25,7 @@ window.addEventListener('message', async (message) => {
   const worker = await import('https://chef.convex.dev/scripts/worker.bundled.mjs');
   await worker.respondToMessage(message);
 });
-                `,
+            `,
                 map: null,
               };
             }
@@ -40,15 +40,4 @@ window.addEventListener('message', async (message) => {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-
-  // === THÊM PHẦN NÀY VÀO ĐỂ BUILD TRANG ADMIN ===
-  build: {
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, "index.html"),
-        admin: path.resolve(__dirname, "admin.html"),
-      },
-    },
-  },
-  // ===============================================
 }));
