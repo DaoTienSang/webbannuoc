@@ -60,9 +60,9 @@ export function SearchBar({ onProductClick }: SearchBarProps) {
         />
       </div>
 
-      {/* Improved Search Results Dropdown */}
+      {/* Improved Search Results Dropdown - Fixed position to avoid being covered */}
       {isSearching && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-blue-100 max-h-80 overflow-y-auto z-50">
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-blue-100 max-h-[70vh] overflow-y-auto z-[100]">
           {!searchResults ? (
             <div className="p-4 text-center text-gray-600">
               <div className="spinner mx-auto mb-2"></div>
